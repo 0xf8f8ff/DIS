@@ -23,10 +23,6 @@ fi
 echo "Installed Java, current version: "
 java -version
 
-if ! hash python; then
-
-fi
-
 version=$(python -V 2>&1 | grep -Po '(?<=Python )(.+)')
 if [[ -z "$version" ]]; then
     echo "Python is not installed" 
@@ -37,6 +33,13 @@ echo "Installed Python. Default Python version now:"
 python --version
 
 pip install mrjob
+
+# Install python on all nodes
+if [ $nodetype = "master" ]; then
+	ssh -t ubuntu@slave-1 "apt install python3-pip"
+	ssh -t ubuntu@slave-2 "apt install python3-pip"
+	ssh -t ubuntu@slave-3 "apt install python3-pip"
+fi
 
 # 2. Download hadoop on master
 if [ $nodetype = "master" ]; then
