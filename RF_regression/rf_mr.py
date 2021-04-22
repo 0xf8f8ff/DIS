@@ -19,7 +19,7 @@ class RFTree:
         self.sample_features = sample_features
 
     def model(self):
-        root = self.training_set
+        root = self.split(self.training_set)
         self.branch_out(root, 1)
         return root
 
