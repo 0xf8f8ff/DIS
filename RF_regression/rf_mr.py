@@ -106,7 +106,7 @@ class RFTree:
             right = np.array(branches[1])[:,-1]
             sd2 = np.std(right)
 
-        pooled = math.sqrt((math.sqrt(sd1) + math.sqrt(sd2))/2)
+        pooled = math.sqrt((sd1**2 + sd2**2)/2)
         return pooled
 
 
