@@ -1,25 +1,27 @@
 from mrjob.job import MRJob
 from mrjob.step import MRStep
-#from mrjob.protocol import RawValueProtocol
+from mrjob.protocol import RawValueProtocol
+import csv
 
-considered_locations = [
-    "\"India\"", "\"China\"", "\"Iran\"", "\"South Korea\"", "\"South Africa\"", "\"Kenya\"",
-    "\"Bangladesh\"", "\"Sweden\"", "\"Norway\"", "\"Germany\"", "\"Italy\"", "\"United Kingdom\"",
-    "\"Brazil\"", "\"United States\"", "\"Canada\"", "\"Australia\"", "\"US\"", "\"UK\""
-]
 airport_types = [
    "\"large_airport\"", "\"small_airport\"", "\"medium_airport\""
 ]
 
 class joinISOcodes(MRJob):
-#    OUTPUT_PROTOCOL = RawValueProtocol
+    OUTPUT_PROTOCOL = RawValueProtocol
 
     def steps(self):
         return [
-            MRStep(mapper=self.mapper_ISO,
-                   reducer=self.reducer_ISO),
+            MRStep(mapper_init=self.mapper_init_ISO,
+                mapper=self.mapper_ISO,
+                reducer=self.reducer_ISO),
             MRStep(mapper=self.mapper_ICAO)
             ]
+
+    def mapper_init_ISO(self):
+        self.locations = list()
+        for country in csv.reader(open("country_list", "r")):
+            self.locations.append(country)
 
     def mapper_ISO(self, _, line):
         row = line.split(',')
@@ -28,10 +30,10 @@ class joinISOcodes(MRJob):
             # the row is from the ICAO code dataset
             if len(row) >= 9:
                 if row[2] in airport_types:
-                    yield (row[8], row[1])
+                    yield (row[8].replace('"', ''), row[1].replace('"', ''))
             # the row is from country ISO dataset
             elif len(row) > 4 and len(row[0]) == 6:
-                yield (row[1], row[2])
+                yield (row[1].replace('"', ''), row[2].replace('"', ''))
 
     def reducer_ISO(self, key, values):
         yield key, list(values)
@@ -42,7 +44,7 @@ class joinISOcodes(MRJob):
             if len(codes) > 1: 
                 countryName = ""
                 for code in codes:
-                    if code in considered_locations:
+                    if code in self.locations:
                         countryName = code
                 if countryName != "":
                     for code in codes:

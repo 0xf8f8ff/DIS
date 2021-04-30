@@ -12,7 +12,7 @@ class processFlights(MRJob):
 
     def mapper(self, _, line):
         row = line.split(',')
-        # skip first line
+        # skip the first line
         if row[0] != "callsign":
             relevant = False
             # replace ICAO codes of airports with country names

@@ -21,16 +21,13 @@ df = df.reset_index(drop=True)
 df_countries = df.copy()
 
 df = df.drop([
-    'iso_code', 'continent', 'new_cases_per_million', 'new_deaths_per_million',
-    'icu_patients_per_million', 'hosp_patients_per_million',
+    'iso_code', 'continent', 'new_cases_per_million',
     'weekly_icu_admissions', 'weekly_icu_admissions_per_million',
     'weekly_hosp_admissions', 'weekly_hosp_admissions_per_million',
     'new_tests', 'total_tests_per_thousand', 'new_tests_per_thousand',
     'new_tests_smoothed', 'new_tests_smoothed_per_thousand', 'tests_units',
-    'handwashing_facilities', 'hosp_patients', 'icu_patients', 'positive_rate',
-    'tests_per_case'
-],
-             axis=1)
+    'handwashing_facilities', 'hosp_patients', 'icu_patients',
+], axis=1)
 
 df.loc[df.location == 'Germany', 'extreme_poverty'] = 0.2
 
