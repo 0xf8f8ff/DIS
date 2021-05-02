@@ -1,16 +1,16 @@
-Additional preprocessing specifically for RF algo:
+# Random Forest regression
 
-1. RF does not work with null values, but there is no vaccination data in 2020, i.e., all vaccination related columns are filled with null values. We have to replace null values in vaccination columns with zeroes. (At the same time replacing any other data still missing after the initial cleaning).
+**rf_preprocess.py**: data preparation script, writes testing and training datasets in csv format to `rf_training.csv` and `rf_testing.csv`.
 
-2. For easier visualization and analysis we predict for one country at a time. The country name is provided as command line argument. Default country is Norway. We filter out rows that contain information for other countries.
+**make_dummy.py**: a script for creating a dummy file, pass the desired number of decision trees as a command line argument. Example usage: `python make_dummy.py 1000` for running the regression with 1000 trees.
 
-3. We drop columns with index and location name, otherwise the algorithm would treat them as possible features slowing down the performance. 
+**rf_mr.py**: *mrjob* MapReduce implementation of the Random Forest regression algorithm. Options: *--tree-depth* - to limit the depth of the decision trees, *--min-samples* - the number of records in a node to stop splitting and form a leaf node.
 
-4. We transform the date column into month number.
-
-5. Additionally, we split the dataset into the training and testing subsets. All data for 2020 goes into training set, all data for 2021 - into testing.
-
-
+Usage: 
 ```
-python rf_mr.py --files rf_testing.csv,rf_training.csv --hadoop-streaming-jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-streaming.jar -r hadoop hdfs:///testdata/dummy --output-dir hdfs:///rfregression --no-output
+python rf_mr.py --files rf_testing.csv,rf_training.csv -r hadoop hdfs:///testdata/dummy --output-dir hdfs:///rfregression --no-output
 ```
+
+**rf_mllib.ipynb**: Random Forest regression with Spark's *mllib*.
+
+**rf_plot.py**: graph plotting script.
