@@ -38,7 +38,7 @@ Second mapper reads all resulting lists and emits pairs of ICAO code and corresp
 
 - running:
  ```
- python preprocess_ISO_codes.py -r hadoop hdfs:///data/codes* --output-dir hdfs:///data/lookup --no-output
+ python preprocess_ISO_codes.py --files country_list -r hadoop hdfs:///data/codes* --output-dir hdfs:///data/lookup --no-output
  ```
 
 Result will be saved to the /data/lookup folder
@@ -83,11 +83,11 @@ Output is recorded into `flights.csv`.
 
 ### Instructions
 
-`python extract_flight_columns.py -r hadoop hdfs:///data/flight_data_raw/part* --output-dir hdfs:///data/flights_processed --no-output`
+`python extract_flight_columns.py --files country_list -r hadoop hdfs:///data/flight_data_raw/part* --output-dir hdfs:///data/flights_processed --no-output`
 
 ## Cleaning the main dataset, adding data from the processed dataset as new columns (dataset ready, pandasjoin.py had dataframe-based code, mapreduce-based code is in progress)
 
-Mapreduce code for this task is still being debugged. `pandasjoin.py` has code using pandas' dataframes. This codes gives same dataset as the mapreduce-based code. We can compare the performance of two code variants and use this info for performance tuning of the cluster.
+Mapreduce code for this task is still being debugged. `pandasjoin.py` has code using pandas' dataframes. This codes gives same dataset as the mapreduce-based code.
 
 All cleaning is applied as in the report unchanged, then two new columns added and populated with data from the flights dataset.
 

@@ -12,5 +12,5 @@ Additional preprocessing specifically for RF algo:
 
 
 ```
-python optimized.py --files rf_testing.csv,rf_training.csv --hadoop-streaming-jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-streaming.jar -r hadoop hdfs:///testdata/dummy.csv
+python rf_mr.py --files rf_testing.csv,rf_training.csv --hadoop-streaming-jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-streaming.jar -r hadoop hdfs:///testdata/dummy --output-dir hdfs:///rfregression --no-output
 ```
