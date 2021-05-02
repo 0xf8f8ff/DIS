@@ -2,7 +2,6 @@ import pandas as pd
 import csv
 from datetime import datetime as dt
 
-# Not my code, taken from the report ---------------------------------------
 
 url = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
 df = pd.read_csv(url, sep='\,', na_values='.', engine='python')
@@ -116,8 +115,6 @@ df.loc[((df.location == 'Brazil') & (df.stringency_index.isna())),
 # Total deaths per million is NaN before the first death
 df.loc[df['total_deaths_per_million'].isna(), 'total_deaths_per_million'] = 0
 
-# My code -------------------------------------------------------------------------------------
-
 # add two new columns (empty at first)
 column_names = df.columns.values.tolist()
 column_names.append("internal_flights")
@@ -132,7 +129,6 @@ with open('flights.csv', 'r') as file:
     for date, country, internal, arrivals in reader:
         df.loc[(df['location'] == country) & (df['date'] == date), ['internal_flights', 'international_arrivals']] = [internal, arrivals]
 
-#---------------------------------------------------------------------------------------
 
 # Converting date column to timestamp:
 df.date = df.date.apply(lambda date: (dt.strptime(date, '%Y-%m-%d')))
